@@ -28,7 +28,7 @@
       };
 
       environment.etc."hypr/wallpaper.png".source = pkgs.fetchurl {
-        url = "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1950&q=80";
+        url = "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1920&q=80";
         sha256 = "0v8kdw48h29zcbvd3n7rfgb72y0hdmsv6a8p4mvsbw55szpjcdzr";
       };
 
@@ -38,3 +38,4 @@
     };
   };
 }
+
