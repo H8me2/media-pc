@@ -1,19 +1,21 @@
 { config, lib, pkgs, ... }:
 
 {
-  options.my.kioskMode = lib.mkEnableOption "Enable kiosk mode for launching Brave";
+  options.my.kioskMode = lib.mkEnableOption "Enable kiosk mode for launching Brave in fullscreen";
 
   config = lib.mkIf config.my.kioskMode {
     systemd.user.services.kiosk-brave = {
       description = "Launch Brave in Kiosk Mode";
       wantedBy = [ "graphical-session.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.writeShellScript "kiosk-start" ''
-          #!/bin/sh
-          if [ \"$HYPRLAND_KIOSK\" = \"1\" ]; then
-            brave --start-fullscreen https://www.youtube.com
-          fi
-        ''}";
+        ExecStart = let
+          autostartScript = ''
+            #!/bin/sh
+            if [ "$HYPRLAND_KIOSK" = "1" ]; then
+              brave --start-fullscreen https://www.youtube.com
+            fi
+          '';
+        in "${pkgs.writeShellScript "kiosk-start" autostartScript}";
         Restart = "always";
       };
     };
