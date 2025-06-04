@@ -1,5 +1,13 @@
 { config, lib, pkgs, ... }:
 
+let
+  autostartScript = ''
+    #!/bin/sh
+    if [ "$HYPRLAND_KIOSK" = "1" ]; then
+      brave --start-fullscreen https://www.youtube.com
+    fi
+  '';
+in
 {
   options.my.kioskMode = lib.mkEnableOption "Enable kiosk mode for launching Brave in fullscreen";
 
@@ -8,14 +16,7 @@
       description = "Launch Brave in Kiosk Mode";
       wantedBy = [ "graphical-session.target" ];
       serviceConfig = {
-        ExecStart = let
-          autostartScript = ''
-            #!/bin/sh
-            if [ "$HYPRLAND_KIOSK" = "1" ]; then
-              brave --start-fullscreen https://www.youtube.com
-            fi
-          '';
-        in "${pkgs.writeShellScript "kiosk-start" autostartScript}";
+        ExecStart = "${pkgs.writeShellScript "kiosk-start" autostartScript}";
         Restart = "always";
       };
     };
